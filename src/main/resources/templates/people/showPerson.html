@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о клиенте</title>
+</head>
+<body>
+    <p th:text="${person.getFio() + ', ' + person.getBirthday()}"></p>
+
+    <div th:if="${books.size() == 0}">
+        <p>Человек пока не взял ни одной книги</p>
+    </div>
+    <div th:unless="${books.size() == 0}">
+        <p style="font-weight: bold">Книги:</p>
+        <p th:each="book : ${books}" th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getPublishYear()}">
+        </p>
+    </div>
+
+    <hr/>
+
+    <form th:method="get" th:action="@{/people/{id}/edit(id=${person.getPersonId()})}">
+        <input type="submit" value="Редактировать"/>
+    </form>
+
+    <br/>
+
+    <form th:method="delete" th:action="@{/people/{id}(id=${person.getPersonId()})}">
+        <input type="submit" value="Удалить">
+    </form>
+
+    <br/>
+
+    <form style="float: left" th:method="get" th:action="@{/people}">
+        <input type="submit" value="Показать всех людей">
+    </form>
+
+</body>
+</html>
