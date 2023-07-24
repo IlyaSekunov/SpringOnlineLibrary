@@ -8,7 +8,7 @@
 
     <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getPublishYear()}">Book description</p>
 
-    <div th:if="${book.getPersonId() == 0}">
+    <div th:if="${book.getBookOwner() == null}">
         <p>Эта книга сейчас свободна. Кому назначить ее?</p>
         <label for="person">Выберите человека</label>
         <form th:method="patch" th:action="@{/books/{id}/update_owner(id=${book.getBookId()})}" id="people">
@@ -21,7 +21,7 @@
         </form>
     </div>
 
-    <div th:unless="${book.getPersonId() == 0}">
+    <div th:unless="${book.getBookOwner() == null}">
         Книга сейчас у:
         <a th:text="${bookOwner.getFio()}"></a>
         <form style="margin-top: 20px" th:method="patch" th:action="@{/books/{id}/reset_owner(id=${book.getBookId()})}">

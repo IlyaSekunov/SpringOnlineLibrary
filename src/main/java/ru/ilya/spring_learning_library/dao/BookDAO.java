@@ -3,12 +3,12 @@ package ru.ilya.spring_learning_library.dao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.ilya.spring_learning_library.model.Book;
 import ru.ilya.spring_learning_library.model.Person;
 import java.util.List;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class BookDAO {
 

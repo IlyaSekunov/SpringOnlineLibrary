@@ -9,18 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import ru.ilya.spring_learning_library.dao.BookDAO;
 import ru.ilya.spring_learning_library.model.Book;
 import ru.ilya.spring_learning_library.dao.PersonDAO;
+import ru.ilya.spring_learning_library.service.BookService;
+import ru.ilya.spring_learning_library.service.PersonService;
 
 @Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController {
 
-    private final BookDAO bookDAO;
-    private final PersonDAO personDAO;
+    private final BookService bookService;
+    private final PersonService personService;
 
     @GetMapping
     public String showAllBooks(Model model) {
-        model.addAttribute("books", bookDAO.getAllBooks());
+        model.addAttribute("books", bookService.findAll());
         return "books/allBooks";
     }
 
@@ -34,50 +36,50 @@ public class BookController {
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "books/addBook";
 
-        bookDAO.addBook(book);
+        bookService.save(book);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}")
-    public String showBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", bookDAO.getBookByBookId(id));
-        model.addAttribute("people", personDAO.getAllPeople());
-        model.addAttribute("bookOwner", bookDAO.getBookOwnerByBookId(id));
+    public String showBook(@PathVariable("id") int bookId, Model model) {
+        model.addAttribute("book", bookService.findById(bookId));
+        model.addAttribute("people", personService.findAll());
+        model.addAttribute("bookOwner", bookService.getBookOwnerByBookId(bookId));
         return "books/showBook";
     }
 
     @PatchMapping("/{id}/update_owner")
     public String updateBookOwner(@PathVariable("id") int bookId,
                                @RequestParam("newOwner") int newOwnerId) {
-        bookDAO.updateBookOwner(bookId, newOwnerId);
+        bookService.updateBookOwner(bookId, newOwnerId);
         return "redirect:/books/" + bookId;
     }
 
     @PatchMapping("/{id}/reset_owner")
     public String resetBookOwner(@PathVariable("id") int bookId) {
-        bookDAO.deleteBookOwner(bookId);
+        bookService.deleteBookOwnerByBookId(bookId);
         return "redirect:/books/" + bookId;
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable("id") int id) {
-        bookDAO.deleteBook(id);
+    public String deleteBook(@PathVariable("id") int bookId) {
+        bookService.delete(bookId);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit")
-    public String editBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", bookDAO.getBookByBookId(id));
+    public String editBook(@PathVariable("id") int bookId, Model model) {
+        model.addAttribute("book", bookService.findById(bookId));
         return "books/editBook";
     }
 
     @PatchMapping("/{id}")
-    public String updateBook(@PathVariable("id") int id,
+    public String updateBook(@PathVariable("id") int bookId,
                              @ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "books/editBook";
 
-        bookDAO.updateBook(id, book);
+        bookService.update(bookId, book);
         return "redirect:/books/showBook";
     }
 }
