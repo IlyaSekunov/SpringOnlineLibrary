@@ -12,6 +12,9 @@ import ru.ilya.spring_learning_library.dao.PersonDAO;
 import ru.ilya.spring_learning_library.service.BookService;
 import ru.ilya.spring_learning_library.service.PersonService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
@@ -21,8 +24,12 @@ public class BookController {
     private final PersonService personService;
 
     @GetMapping
-    public String showAllBooks(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String showAllBooks(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "books_per_page", required = false, defaultValue = "0") int booksPerPage,
+            @RequestParam(value = "sort_by_year", required = false, defaultValue = "false") boolean sortByYear,
+            Model model) {
+
+        model.addAttribute("books", bookService.findAll(page, booksPerPage, sortByYear));
         return "books/allBooks";
     }
 
@@ -32,7 +39,7 @@ public class BookController {
     }
 
     @PostMapping
-    public String addBook(@ModelAttribute("book") @Valid Book book,
+    public String addBook(@Valid Book book,
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "books/addBook";
 
@@ -80,6 +87,16 @@ public class BookController {
         if (bindingResult.hasErrors()) return "books/editBook";
 
         bookService.update(bookId, book);
-        return "redirect:/books/showBook";
+        return "redirect:/books/" + bookId;
+    }
+
+    @GetMapping("/search")
+    public String searchBook(@RequestParam(value = "search_string", required = false) String searchString, Model model) {
+        List<Book> books = null;
+        if (searchString != null) {
+            books = bookService.findBooksContaining(searchString);
+        }
+        model.addAttribute("books", books);
+        return "books/searchBook";
     }
 }

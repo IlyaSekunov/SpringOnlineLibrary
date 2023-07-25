@@ -30,6 +30,11 @@
     </div>
 
     <br/>
+    <form th:method="get" th:action="@{/books/{id}/edit(id=${book.getBookId()})}">
+        <input type="submit" value="Редактировать">
+    </form>
+
+    <br/>
     <form th:method="delete" th:action="@{/books/{id}(id=${book.getBookId()})}">
         <input type="submit" value="Удалить">
     </form>

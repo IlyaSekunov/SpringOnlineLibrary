@@ -32,7 +32,7 @@ public class PersonController {
     }
 
     @PostMapping
-    public String addPerson(@ModelAttribute("person") @Valid Person person,
+    public String addPerson(@Valid Person person,
                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "people/addPerson";
 
@@ -57,6 +57,7 @@ public class PersonController {
     public String editPerson(@PathVariable("id") int personId, @ModelAttribute("person") @Valid Person person,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "people/editPerson";
+
         personService.update(personId, person);
         return "redirect:/people/" + personId;
     }

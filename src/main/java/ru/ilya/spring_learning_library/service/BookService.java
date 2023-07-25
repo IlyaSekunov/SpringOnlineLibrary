@@ -1,6 +1,8 @@
 package ru.ilya.spring_learning_library.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilya.spring_learning_library.model.Book;
@@ -28,8 +30,18 @@ public class BookService {
         return bookRepository.findAllByBookOwner(bookOwner);
     }
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<Book> findAll(int page, int itemsPerPage, boolean sortByYear) {
+        if (page > 0 && itemsPerPage > 0) {
+            if (sortByYear) {
+                return bookRepository.findAll(PageRequest.of(page - 1, itemsPerPage, Sort.by("publishYear"))).getContent();
+            } else {
+                return bookRepository.findAll(PageRequest.of(page - 1, itemsPerPage)).getContent();
+            }
+        } else if (sortByYear) {
+            return bookRepository.findAll(Sort.by("publishYear"));
+        } else {
+            return bookRepository.findAll();
+        }
     }
 
     @Transactional
@@ -85,5 +97,9 @@ public class BookService {
             bookOwner.removeBook(book);
             bookRepository.save(book);
         }
+    }
+
+    public List<Book> findBooksContaining(String title) {
+        return bookRepository.findByTitleContaining(title);
     }
 }
