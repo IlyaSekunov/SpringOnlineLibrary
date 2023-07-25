@@ -21,9 +21,9 @@
         </form>
     </div>
 
-    <div th:unless="${book.getBookOwner() == null}">
+    <div th:if="${book.getBookOwner() != null}">
         Книга сейчас у:
-        <a th:text="${bookOwner.getFio()}"></a>
+        <a th:style="${book.isExpired() ? 'color: red' : ''}" th:text="${bookOwner.getFio()}"></a>
         <form style="margin-top: 20px" th:method="patch" th:action="@{/books/{id}/reset_owner(id=${book.getBookId()})}">
             <input type="submit" value="Освободить книгу">
         </form>

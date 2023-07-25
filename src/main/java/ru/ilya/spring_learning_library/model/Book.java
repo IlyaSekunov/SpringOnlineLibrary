@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Entity
 @Table(name = "Book")
@@ -34,4 +35,11 @@ public class Book {
     @Column(name = "publish_year")
     @NotNull(message = "Год публикации должен быть указан")
     private int publishYear;
+
+    @Column(name = "reservation_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date reservationTime;
+
+    @Transient
+    private boolean isExpired;
 }

@@ -13,6 +13,13 @@
 
     <hr/>
 
+    <form method="get" action="/books">
+        <input type="hidden" name="sort_by_year" value="true">
+        <input type="submit" value="Отсортировать по году">
+    </form>
+
+    <br/>
+
     <form th:method="get" th:action="@{/books/new}">
         <input type="submit" value="Добавить книгу">
     </form>

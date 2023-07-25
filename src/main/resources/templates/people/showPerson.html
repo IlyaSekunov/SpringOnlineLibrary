@@ -10,9 +10,11 @@
     <div th:if="${books.size() == 0}">
         <p>Человек пока не взял ни одной книги</p>
     </div>
-    <div th:unless="${books.size() == 0}">
+    <div th:if="${books.size() > 0}">
         <p style="font-weight: bold">Книги:</p>
-        <p th:each="book : ${books}" th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getPublishYear()}">
+        <p th:each="book : ${books}"
+           th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getPublishYear()}"
+            th:style="${book.isExpired() ? 'color: red' : ''}">
         </p>
     </div>
 

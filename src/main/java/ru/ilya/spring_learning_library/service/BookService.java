@@ -9,9 +9,10 @@ import ru.ilya.spring_learning_library.model.Book;
 import ru.ilya.spring_learning_library.model.Person;
 import ru.ilya.spring_learning_library.repository.BookRepository;
 import ru.ilya.spring_learning_library.repository.PersonRepository;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,20 +28,31 @@ public class BookService {
         if (bookOwnerOptional.isPresent()) {
             bookOwner = bookOwnerOptional.get();
         }
-        return bookRepository.findAllByBookOwner(bookOwner);
+        List<Book> books = bookRepository.findAllByBookOwner(bookOwner);
+        checkExpiredReservations(books);
+        return books;
     }
 
     public List<Book> findAll(int page, int itemsPerPage, boolean sortByYear) {
+        List<Book> books;
         if (page > 0 && itemsPerPage > 0) {
             if (sortByYear) {
-                return bookRepository.findAll(PageRequest.of(page - 1, itemsPerPage, Sort.by("publishYear"))).getContent();
+                books = bookRepository.findAll(PageRequest.of(page - 1, itemsPerPage, Sort.by("publishYear"))).getContent();
+                checkExpiredReservations(books);
+                return books;
             } else {
-                return bookRepository.findAll(PageRequest.of(page - 1, itemsPerPage)).getContent();
+                books = bookRepository.findAll(PageRequest.of(page - 1, itemsPerPage)).getContent();
+                checkExpiredReservations(books);
+                return books;
             }
         } else if (sortByYear) {
-            return bookRepository.findAll(Sort.by("publishYear"));
+            books = bookRepository.findAll(Sort.by("publishYear"));
+            checkExpiredReservations(books);
+            return books;
         } else {
-            return bookRepository.findAll();
+            books = bookRepository.findAll();
+            checkExpiredReservations(books);
+            return books;
         }
     }
 
@@ -50,7 +62,15 @@ public class BookService {
     }
 
     public Book findById(int bookId) {
-        return bookRepository.findById(bookId).orElse(null);
+        Book book = null;
+        Optional<Book> bookOptional = bookRepository.findById(bookId);
+        if (bookOptional.isPresent()) {
+            book = bookOptional.get();
+            if (book.getBookOwner() != null) {
+                checkExpiredReservations(List.of(book));
+            }
+        }
+        return book;
     }
 
     public Person getBookOwnerByBookId(int bookId) {
@@ -71,8 +91,9 @@ public class BookService {
             Book book = bookOptional.get();
             Person person = personOptional.get();
             book.setBookOwner(person);
+            book.setReservationTime(new Date());
             person.addBook(book);
-            bookRepository.save(book); //Посмотреть настройку каскадирования
+            bookRepository.save(book);
         }
     }
 
@@ -94,12 +115,27 @@ public class BookService {
             Book book = bookOptional.get();
             Person bookOwner = book.getBookOwner();
             book.setBookOwner(null);
+            book.setReservationTime(null);
             bookOwner.removeBook(book);
             bookRepository.save(book);
         }
     }
 
     public List<Book> findBooksContaining(String title) {
-        return bookRepository.findByTitleContaining(title);
+        List<Book> books = bookRepository.findByTitleContaining(title);
+        checkExpiredReservations(books);
+        return books;
+    }
+
+    public void checkExpiredReservations(List<Book> books) {
+        for (Book book : books) {
+            if (book.getBookOwner() != null) {
+                Date reservationTime = book.getReservationTime();
+                Date currentTime = new Date();
+                long timeDiff = currentTime.getTime() - reservationTime.getTime();
+                long daysDiff = TimeUnit.MILLISECONDS.toDays(timeDiff);
+                book.setExpired(daysDiff >= 10);
+            }
+        }
     }
 }
