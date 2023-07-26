@@ -41,9 +41,4 @@ public class Person {
     public void removeBook(Book book) {
         books.remove(book);
     }
-
-    public Person(String fio, int birthday) {
-        this.fio = fio;
-        this.birthday = birthday;
-    }
 }

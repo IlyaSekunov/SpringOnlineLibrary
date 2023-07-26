@@ -6,13 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.ilya.spring_learning_library.dao.BookDAO;
 import ru.ilya.spring_learning_library.model.Book;
-import ru.ilya.spring_learning_library.dao.PersonDAO;
 import ru.ilya.spring_learning_library.service.BookService;
 import ru.ilya.spring_learning_library.service.PersonService;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
