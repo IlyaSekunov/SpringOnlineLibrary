@@ -32,12 +32,12 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -Dmaven.test.skip=true package
+      run: mvn -Dmaven.test.skip=true package --file pom.xml
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: /target/*.jar
+        file: target/*.jar
         asset_name: app.jar
         tag: ${{ github.ref }}
         overwrite: true
