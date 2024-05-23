@@ -16,22 +16,22 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
-    private final UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
-        String password = authentication.getCredentials().toString();
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
+    String password = authentication.getCredentials().toString();
 
-        if (!password.equals(userDetails.getPassword())) {
-            throw new BadCredentialsException("Incorrect password");
-        }
-
-        return new UsernamePasswordAuthenticationToken(userDetails, password, Collections.emptyList());
+    if (!password.equals(userDetails.getPassword())) {
+      throw new BadCredentialsException("Incorrect password");
     }
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return true;
-    }
+    return new UsernamePasswordAuthenticationToken(userDetails, password, Collections.emptyList());
+  }
+
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return true;
+  }
 }

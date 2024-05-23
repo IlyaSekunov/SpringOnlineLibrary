@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import ru.ilya.spring_learning_library.model.Person;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Integer> {
-}
+public interface PersonRepository extends JpaRepository<Person, Integer> {}

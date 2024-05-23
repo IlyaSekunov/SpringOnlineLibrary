@@ -16,29 +16,31 @@ import java.util.List;
 @NoArgsConstructor
 public class Person {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_id")
-    private int personId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "person_id")
+  private int personId;
 
-    @Column(name = "fio")
-    @NotEmpty(message = "Поле ФИО не должно быть пустым")
-    @Pattern(regexp = "([А-ЯЁA-Z][а-яёa-z]+[\\-\\s]?){3,}", message = "Поле должно соответствовать: Фамилия Имя Отчество")
-    private String fio;
+  @Column(name = "fio")
+  @NotEmpty(message = "Поле ФИО не должно быть пустым")
+  @Pattern(
+      regexp = "([А-ЯЁA-Z][а-яёa-z]+[\\-\\s]?){3,}",
+      message = "Поле должно соответствовать: Фамилия Имя Отчество")
+  private String fio;
 
-    @Column(name = "birthday")
-    @NotNull(message = "Поле год рождения не должно быть пустым")
-    @Min(value = 1900, message = "Год рождения не может быть меньше 1900г")
-    private int birthday;
+  @Column(name = "birthday")
+  @NotNull(message = "Поле год рождения не должно быть пустым")
+  @Min(value = 1900, message = "Год рождения не может быть меньше 1900г")
+  private int birthday;
 
-    @OneToMany(mappedBy = "bookOwner")
-    private List<Book> books;
+  @OneToMany(mappedBy = "bookOwner")
+  private List<Book> books;
 
-    public void addBook(Book book) {
-        books.add(book);
-    }
+  public void addBook(Book book) {
+    books.add(book);
+  }
 
-    public void removeBook(Book book) {
-        books.remove(book);
-    }
+  public void removeBook(Book book) {
+    books.remove(book);
+  }
 }

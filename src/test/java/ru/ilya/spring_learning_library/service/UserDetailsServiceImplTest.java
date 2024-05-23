@@ -18,36 +18,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDetailsServiceImplTest {
-    @Mock
-    private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-    @Mock
-    private User user;
+  @Mock private User user;
 
-    @InjectMocks
-    private UserDetailsServiceImpl userDetailsService;
+  @InjectMocks private UserDetailsServiceImpl userDetailsService;
 
-    @Test
-    void isUserExists_ReturnsFalseIfUserNotExists() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-        assertThat(userDetailsService.isUserExists("Unknown user")).isFalse();
-    }
+  @Test
+  void isUserExists_ReturnsFalseIfUserNotExists() {
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+    assertThat(userDetailsService.isUserExists("Unknown user")).isFalse();
+  }
 
-    @Test
-    void isUserExists_ReturnsTrueIfUserExists() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        assertThat(userDetailsService.isUserExists("Unknown user")).isTrue();
-    }
+  @Test
+  void isUserExists_ReturnsTrueIfUserExists() {
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+    assertThat(userDetailsService.isUserExists("Unknown user")).isTrue();
+  }
 
-    @Test
-    void loadUserByUsername_ReturnsUserDetailsIfUserExists() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        assertThat(userDetailsService.loadUserByUsername("User")).isInstanceOf(UserDetails.class);
-    }
+  @Test
+  void loadUserByUsername_ReturnsUserDetailsIfUserExists() {
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+    assertThat(userDetailsService.loadUserByUsername("User")).isInstanceOf(UserDetails.class);
+  }
 
-    @Test
-    void loadUserByUsername_ThrowUsernameNotFoundExceptionIfUserNotExists() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("Unknown User"));
-    }
+  @Test
+  void loadUserByUsername_ThrowUsernameNotFoundExceptionIfUserNotExists() {
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+    assertThrows(
+        UsernameNotFoundException.class,
+        () -> userDetailsService.loadUserByUsername("Unknown User"));
+  }
 }

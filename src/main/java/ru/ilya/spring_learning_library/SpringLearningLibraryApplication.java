@@ -8,12 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class SpringLearningLibraryApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(SpringLearningLibraryApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(SpringLearningLibraryApplication.class, args);
+  }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
 }

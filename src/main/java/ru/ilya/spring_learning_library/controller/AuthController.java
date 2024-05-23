@@ -15,22 +15,23 @@ import ru.ilya.spring_learning_library.utill.UserValidator;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserDetailsServiceImpl userDetailsService;
-    private final UserValidator userValidator;
+  private final UserDetailsServiceImpl userDetailsService;
+  private final UserValidator userValidator;
 
-    @GetMapping("/registration")
-    public String registerPage(@ModelAttribute("user") User user) {
-        return "auth/registration";
+  @GetMapping("/registration")
+  public String registerPage(@ModelAttribute("user") User user) {
+    return "auth/registration";
+  }
+
+  @PostMapping("/registration")
+  public String confirmRegistration(
+      @ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    userValidator.validate(user, bindingResult);
+    if (bindingResult.hasErrors()) {
+      return "auth/registration";
     }
 
-    @PostMapping("/registration")
-    public String confirmRegistration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        userValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "auth/registration";
-        }
-
-        userDetailsService.save(user);
-        return "redirect:/people";
-    }
+    userDetailsService.save(user);
+    return "redirect:/people";
+  }
 }

@@ -15,25 +15,22 @@ import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
-    @Mock
-    private PersonRepository personRepository;
+  @Mock private PersonRepository personRepository;
 
-    @Mock
-    private Person person;
+  @Mock private Person person;
 
-    @InjectMocks
-    private PersonService personService;
+  @InjectMocks private PersonService personService;
 
-    @Test
-    void findPersonById_ReturnsNullIfUserIsNotFound() {
-        when(personRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThat(personService.findPersonById(213)).isNull();
-    }
+  @Test
+  void findPersonById_ReturnsNullIfUserIsNotFound() {
+    when(personRepository.findById(anyInt())).thenReturn(Optional.empty());
+    assertThat(personService.findPersonById(213)).isNull();
+  }
 
-    @Test
-    void findPersonById_ReturnsNotNullIfUserIsNotFound() {
-        when(personRepository.findById(anyInt())).thenReturn(Optional.of(person));
-        assertThat(personService.findPersonById(213)).isNotNull();
-        assertThat(personService.findPersonById(213)).isInstanceOf(Person.class);
-    }
+  @Test
+  void findPersonById_ReturnsNotNullIfUserIsNotFound() {
+    when(personRepository.findById(anyInt())).thenReturn(Optional.of(person));
+    assertThat(personService.findPersonById(213)).isNotNull();
+    assertThat(personService.findPersonById(213)).isInstanceOf(Person.class);
+  }
 }

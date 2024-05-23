@@ -11,18 +11,18 @@ import ru.ilya.spring_learning_library.service.UserDetailsServiceImpl;
 @RequiredArgsConstructor
 public class UserValidator implements Validator {
 
-    private final UserDetailsServiceImpl userDetailsService;
+  private final UserDetailsServiceImpl userDetailsService;
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return User.class.equals(clazz);
-    }
+  @Override
+  public boolean supports(Class<?> clazz) {
+    return User.class.equals(clazz);
+  }
 
-    @Override
-    public void validate(Object target, Errors errors) {
-        User user = (User) target;
-        if (userDetailsService.isUserExists(user.getUsername())) {
-            errors.rejectValue("username", "", "User with this username already exists");
-        }
+  @Override
+  public void validate(Object target, Errors errors) {
+    User user = (User) target;
+    if (userDetailsService.isUserExists(user.getUsername())) {
+      errors.rejectValue("username", "", "User with this username already exists");
     }
+  }
 }
