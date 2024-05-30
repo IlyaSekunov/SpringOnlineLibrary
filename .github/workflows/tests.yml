@@ -5,17 +5,7 @@ jobs:
   run_tests:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_DATABASE: spring_project1
-          MYSQL_ROOT_PASSWORD: testpassword
-        options: >-
-          --health-cmd mysqladmin ping
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+
 
     steps:
       - name: Set up MySQL
