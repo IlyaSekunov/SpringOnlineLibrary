@@ -45,4 +45,4 @@ jobs:
         with:
           name: JUnit tests
           path: '**/build/test-results/test/TEST-*.xml'
-          reporter: junit
+          reporter: jest-junit
