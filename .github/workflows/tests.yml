@@ -25,10 +25,10 @@ jobs:
           mysql password: testpassword # Required if "mysql user" exists. The password for the "mysql user"
 
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 17
 
