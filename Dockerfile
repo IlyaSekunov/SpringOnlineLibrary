@@ -3,6 +3,6 @@ COPY . /app
 WORKDIR /app
 RUN mvn clean package
 
-FROM openjdk:11-jre-slim
+FROM openjdk:17-alpine
 COPY --from=build /app/target/*.jar /app.jar
 CMD ["java", "-jar", "/app.jar"]
