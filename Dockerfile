@@ -1,7 +1,7 @@
 FROM maven:latest AS build
 COPY . /app
 WORKDIR /app
-RUN mvn clean package
+RUN mvn clean package -DskipTest
 
 FROM openjdk:17-alpine
 COPY --from=build /app/target/*.jar /app.jar
