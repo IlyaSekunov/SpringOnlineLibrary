@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  online-library:
+    image: ilyasekunov/online-library
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: online-library-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - online-library-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://online-library-db:3306/library?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+
+  online-library-db:
+    image: mysql
+    container_name: online-library-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: your_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+volumes:
+  db: {}
