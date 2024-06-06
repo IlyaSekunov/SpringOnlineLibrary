@@ -27,7 +27,7 @@ jobs:
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          image: enggadda/github-action
+          image: ilyasekunov/online-library:latest
           tags: latest
           registry: docker.io
           dockerfile: Dockerfile
