@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
   online-library:
@@ -21,11 +21,12 @@ services:
     container_name: online-library-db
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: your_database
+      MYSQL_DATABASE: library
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     volumes:
       - db:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d/:ro
     ports:
       - "3307:3306"
 
